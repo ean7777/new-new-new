@@ -35,12 +35,16 @@
         #header-logo {
             max-width: 300px;
             height: auto;
-            margin-bottom: 20px; 
+            margin-bottom: 10px; /* Чуть уменьшил отступ до заголовка */
             display: block;
             margin-left: auto;
             margin-right: auto;
         }
-        h1 { color: #333; margin: 0 0 10px 0; }
+        h1 { 
+            color: #333; 
+            margin: 0 0 10px 0; 
+            font-weight: 600; /* Сделал шрифт чуть жирнее */
+        }
         
         /* Стиль для переменчивой фразы */
         #ai-slogan { 
@@ -87,9 +91,9 @@
     <div class="header-section">
         <img src="image.png" alt="Rich Flavour Логотип" id="header-logo">
         
-        <h1>Rich Flavour: Прайс-лист</h1>
+        <h1>Прайс-лист</h1>
         
-        <p id="ai-slogan">Rich Flavour — только оригинал.</p>
+        <p id="ai-slogan">Только оригинал.</p>
 
         <a href="http://vk.me/richflavour29" target="_blank" class="vk-button">
             📩 Оформить заказ
@@ -125,7 +129,7 @@
 <script>
     const FILE_NAME = 'price.xlsx'; 
     
-    // === НОВЫЙ БЛОК: РАЗНЫЕ ВОПРОСЫ ДЛЯ ИИ ===
+    // === ВОПРОСЫ ДЛЯ ИИ ===
     const PROMPTS_LIST = [
         "Напиши короткий слоган про 100% оригинал парфюмерии. Максимум 8 слов.",
         "Придумай красивую фразу про роскошь ароматов. Коротко.",
@@ -142,7 +146,6 @@
     // 1. Автозагрузка
     async function tryAutoLoad() {
         try {
-            // Добавляем случайное число к запросу файла, чтобы браузер не кешировал старую версию
             const response = await fetch(FILE_NAME + "?v=" + Math.random());
             if (!response.ok) throw new Error("Файл не найден");
             const arrayBuffer = await response.arrayBuffer();
@@ -180,7 +183,6 @@
         var headers = data[0].map(h => ({ title: h || "Col" }));
         var rows = data.slice(1);
 
-        // Округляем цены
         rows = rows.map(function(row) {
             return row.map(function(cell) {
                 if (typeof cell === 'number') return Math.round(cell);
@@ -206,19 +208,15 @@
         $('#table-wrapper').fadeIn();
     }
 
-    // 5. ГЕНЕРАТОР РАЗНООБРАЗНЫХ СЛОГАНОВ
+    // 5. Генератор слоганов
     async function generateDynamicSlogan() {
-        // Выбираем случайный вопрос из списка
         const randomPrompt = PROMPTS_LIST[Math.floor(Math.random() * PROMPTS_LIST.length)];
-        
-        // Добавляем случайное число в конец URL (cache busting), чтобы запрос был всегда новым
         const url = `https://text.pollinations.ai/${encodeURIComponent(randomPrompt)}?seed=${Math.floor(Math.random() * 1000)}`;
 
         try {
             const response = await fetch(url);
             if(response.ok) {
                 const text = await response.text();
-                // Плавно меняем текст
                 const el = document.getElementById('ai-slogan');
                 el.style.opacity = 0;
                 setTimeout(() => {
@@ -227,7 +225,6 @@
                 }, 500);
             }
         } catch (e) {
-            // Если ошибка — оставляем статический текст
             console.log("AI error, using default");
         }
     }
@@ -235,3 +232,4 @@
 
 </body>
 </html>
+
