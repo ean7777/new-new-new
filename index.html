@@ -19,6 +19,7 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/106427807" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
     
     <style>
         body {
@@ -39,9 +40,9 @@
         /* === ШАПКА === */
         .header-section { 
             text-align: center; 
-            margin-bottom: 30px; 
+            margin-bottom: 20px; 
             border-bottom: 2px solid #eee; 
-            padding-bottom: 30px; 
+            padding-bottom: 20px; 
         }
         #header-logo {
             max-width: 300px;
@@ -51,13 +52,18 @@
             margin-left: auto;
             margin-right: auto;
         }
-        h1 { 
-            color: #333; 
-            margin: 0 0 15px 0; 
-            font-weight: 600; 
-        }
+        h1 { color: #333; margin: 0 0 5px 0; font-weight: 600; }
         
-        /* Стиль для фразы */
+        /* Дата обновления */
+        #update-date {
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Слоган */
         #static-slogan { 
             font-style: italic; 
             color: #555; 
@@ -67,75 +73,63 @@
             padding: 0 10%;
         }
 
-        /* Кнопка ВКонтакте */
-        .vk-button {
-            display: inline-block;
-            background-color: #0077FF;
+        /* Кнопки соцсетей */
+        .buttons-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .social-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             color: white;
             text-decoration: none;
             font-weight: bold;
             font-size: 16px;
-            padding: 12px 30px;
+            padding: 12px 25px;
             border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0, 119, 255, 0.3);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .vk-button:hover {
-            background-color: #005ecc;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
-        }
-
-        /* === НОВЫЕ ФИШКИ: КНОПКА НАВЕРХ И УВЕДОМЛЕНИЕ === */
+        /* ВК */
+        .btn-vk { background-color: #0077FF; }
+        .btn-vk:hover { background-color: #005ecc; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 119, 255, 0.3); }
         
-        /* Кнопка наверх */
-        #scrollTopBtn {
-            display: none; 
-            position: fixed; 
-            bottom: 30px; 
-            right: 30px; 
-            z-index: 99; 
-            border: none; 
-            outline: none; 
-            background-color: #0077FF; 
-            color: white; 
-            cursor: pointer; 
-            padding: 15px; 
-            border-radius: 50%; 
-            font-size: 18px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        #scrollTopBtn:hover { background-color: #0055cc; transform: scale(1.1); }
+        /* Телеграм */
+        .btn-tg { background-color: #229ED9; }
+        .btn-tg:hover { background-color: #1a7db0; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(34, 158, 217, 0.3); }
 
-        /* Уведомление "Скопировано" */
+
+        /* === ИНТЕРФЕЙС === */
+        #scrollTopBtn {
+            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; 
+            border: none; outline: none; background-color: #333; color: white; 
+            cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.3s; opacity: 0.7;
+        }
+        #scrollTopBtn:hover { background-color: #000; transform: scale(1.1); opacity: 1; }
+
         #toast {
-            visibility: hidden; 
-            min-width: 250px; 
-            margin-left: -125px; 
-            background-color: #333; 
-            color: #fff; 
-            text-align: center; 
-            border-radius: 50px; 
-            padding: 16px; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 50%; 
-            bottom: 30px; 
-            font-size: 17px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            visibility: hidden; min-width: 250px; margin-left: -125px; 
+            background-color: #333; color: #fff; text-align: center; border-radius: 50px; 
+            padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; 
+            font-size: 17px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         #toast.show { visibility: visible; -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         
-        /* Анимации для уведомления */
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        /* Улучшение таблицы: Курсор рука и подсветка */
-        table.dataTable tbody tr { cursor: pointer; transition: background-color 0.2s; }
-        table.dataTable tbody tr:hover { background-color: #e6f2ff !important; } /* Подсветка при наведении */
+        /* Таблица */
+        table.dataTable tbody tr { cursor: pointer; transition: background-color 0.1s; }
+        table.dataTable tbody tr:hover { background-color: #fff3cd !important; } 
         
-        /* Блоки загрузки */
+        /* Фикс для заголовка таблицы */
+        thead { background: white; }
+
+        /* Загрузка */
         #manual-upload { display: none; text-align: center; padding: 30px; border: 2px dashed #ff6b6b; background-color: #fff5f5; border-radius: 8px; margin: 20px 0; }
         .btn-upload { display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         input[type="file"] { display: none; }
@@ -151,8 +145,20 @@
     <div class="header-section">
         <img src="image.png" alt="Rich Flavour Логотип" id="header-logo">
         <h1>Прайс-лист</h1>
+        
+        <span id="update-date"></span>
+
         <p id="static-slogan">Только оригинал.</p>
-        <a href="http://vk.me/richflavour29" target="_blank" class="vk-button">📩 Оформить заказ</a>
+        
+        <div class="buttons-wrapper">
+            <a href="http://vk.me/richflavour29" target="_blank" class="social-button btn-vk">
+                ВКонтакте
+            </a>
+            
+            <a href="https://t.me/rich_flavour" target="_blank" class="social-button btn-tg">
+                Telegram
+            </a>
+        </div>
     </div>
 
     <div id="loading">
@@ -168,7 +174,7 @@
 
     <div id="table-wrapper">
         <p style="text-align:center; color:#888; font-size:0.9em; margin-bottom:10px;">
-            💡 Совет: Нажмите на строку, чтобы скопировать название и цену.
+            💡 Нажмите на строку, чтобы скопировать.
         </p>
         <table id="priceTable" class="display" style="width:100%">
             <thead></thead>
@@ -178,12 +184,12 @@
 </div>
 
 <button id="scrollTopBtn" title="Наверх">⬆</button>
-
-<div id="toast">✅ Скопировано в буфер!</div>
+<div id="toast">✅ Скопировано!</div>
 
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
 
 <script>
     const FILE_NAME = 'price.xlsx'; 
@@ -200,7 +206,6 @@
         showRandomSlogan();
         tryAutoLoad();
 
-        // Логика кнопки "Наверх"
         $(window).scroll(function() {
             if ($(this).scrollTop() > 300) { $('#scrollTopBtn').fadeIn(); } 
             else { $('#scrollTopBtn').fadeOut(); }
@@ -215,6 +220,15 @@
         try {
             const response = await fetch(FILE_NAME + "?v=" + Math.random());
             if (!response.ok) throw new Error("Файл не найден");
+            
+            // Получаем дату обновления файла
+            const lastModified = response.headers.get("Last-Modified");
+            if (lastModified) {
+                const date = new Date(lastModified);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('update-date').innerText = "📅 Прайс обновлен: " + date.toLocaleDateString('ru-RU', options);
+            }
+
             const arrayBuffer = await response.arrayBuffer();
             processData(arrayBuffer);
         } catch (error) {
@@ -258,6 +272,7 @@
             data: rows,
             columns: headers,
             pageLength: 20,
+            fixedHeader: true,
             language: {
                 "processing": "Подождите...",
                 "search": "🔍 Поиск аромата:",
@@ -268,19 +283,13 @@
             }
         });
 
-        // === ФИШКА: КЛИК ПО СТРОКЕ ДЛЯ КОПИРОВАНИЯ ===
         $('#priceTable tbody').on('click', 'tr', function () {
             var data = table.row(this).data();
             if (data) {
-                // Собираем текст строки (Название + Цена)
                 var textToCopy = data.join(' '); 
-                
-                // Копируем в буфер
                 navigator.clipboard.writeText(textToCopy).then(function() {
-                    showToast(); // Показываем уведомление
-                }, function(err) {
-                    console.error('Ошибка копирования: ', err);
-                });
+                    showToast();
+                }, function(err) { console.error('Ошибка копирования: ', err); });
             }
         });
 
@@ -293,7 +302,6 @@
         document.getElementById('static-slogan').innerText = text;
     }
 
-    // Показ уведомления "Скопировано"
     function showToast() {
         var x = document.getElementById("toast");
         x.className = "show";
@@ -303,6 +311,5 @@
 
 </body>
 </html>
-
 
 
