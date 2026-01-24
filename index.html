@@ -86,6 +86,55 @@
             box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
         }
 
+        /* === НОВЫЕ ФИШКИ: КНОПКА НАВЕРХ И УВЕДОМЛЕНИЕ === */
+        
+        /* Кнопка наверх */
+        #scrollTopBtn {
+            display: none; 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            z-index: 99; 
+            border: none; 
+            outline: none; 
+            background-color: #0077FF; 
+            color: white; 
+            cursor: pointer; 
+            padding: 15px; 
+            border-radius: 50%; 
+            font-size: 18px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #scrollTopBtn:hover { background-color: #0055cc; transform: scale(1.1); }
+
+        /* Уведомление "Скопировано" */
+        #toast {
+            visibility: hidden; 
+            min-width: 250px; 
+            margin-left: -125px; 
+            background-color: #333; 
+            color: #fff; 
+            text-align: center; 
+            border-radius: 50px; 
+            padding: 16px; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 50%; 
+            bottom: 30px; 
+            font-size: 17px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        #toast.show { visibility: visible; -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        
+        /* Анимации для уведомления */
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        /* Улучшение таблицы: Курсор рука и подсветка */
+        table.dataTable tbody tr { cursor: pointer; transition: background-color 0.2s; }
+        table.dataTable tbody tr:hover { background-color: #e6f2ff !important; } /* Подсветка при наведении */
+        
         /* Блоки загрузки */
         #manual-upload { display: none; text-align: center; padding: 30px; border: 2px dashed #ff6b6b; background-color: #fff5f5; border-radius: 8px; margin: 20px 0; }
         .btn-upload { display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
@@ -101,14 +150,9 @@
 <div class="container">
     <div class="header-section">
         <img src="image.png" alt="Rich Flavour Логотип" id="header-logo">
-        
         <h1>Прайс-лист</h1>
-        
         <p id="static-slogan">Только оригинал.</p>
-
-        <a href="http://vk.me/richflavour29" target="_blank" class="vk-button">
-            📩 Оформить заказ
-        </a>
+        <a href="http://vk.me/richflavour29" target="_blank" class="vk-button">📩 Оформить заказ</a>
     </div>
 
     <div id="loading">
@@ -119,13 +163,13 @@
     <div id="manual-upload">
         <h3 style="color:#d63031">Файл не загрузился автоматически</h3>
         <p>Выберите файл вручную:</p>
-        <label class="btn-upload">
-            📂 Выбрать price.xlsx
-            <input type="file" id="fileInput" accept=".xlsx, .xls">
-        </label>
+        <label class="btn-upload">📂 Выбрать price.xlsx<input type="file" id="fileInput" accept=".xlsx, .xls"></label>
     </div>
 
     <div id="table-wrapper">
+        <p style="text-align:center; color:#888; font-size:0.9em; margin-bottom:10px;">
+            💡 Совет: Нажмите на строку, чтобы скопировать название и цену.
+        </p>
         <table id="priceTable" class="display" style="width:100%">
             <thead></thead>
             <tbody></tbody>
@@ -133,14 +177,16 @@
     </div>
 </div>
 
+<button id="scrollTopBtn" title="Наверх">⬆</button>
+
+<div id="toast">✅ Скопировано в буфер!</div>
+
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 <script>
     const FILE_NAME = 'price.xlsx'; 
-    
-    // === ВАШИ ПРОВЕРЕННЫЕ ФРАЗЫ ===
     const SLOGANS = [
         "Гарантия подлинности каждой позиции.",
         "Ваш надежный поставщик оригинальной парфюмерии.",
@@ -153,9 +199,18 @@
     $(document).ready(function() {
         showRandomSlogan();
         tryAutoLoad();
+
+        // Логика кнопки "Наверх"
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) { $('#scrollTopBtn').fadeIn(); } 
+            else { $('#scrollTopBtn').fadeOut(); }
+        });
+        $('#scrollTopBtn').click(function() {
+            $('html, body').animate({scrollTop : 0}, 600);
+            return false;
+        });
     });
 
-    // 1. Автозагрузка
     async function tryAutoLoad() {
         try {
             const response = await fetch(FILE_NAME + "?v=" + Math.random());
@@ -169,7 +224,6 @@
         }
     }
 
-    // 2. Ручная загрузка
     document.getElementById('fileInput').addEventListener('change', function(e) {
         var file = e.target.files[0];
         if (!file) return;
@@ -180,7 +234,6 @@
         reader.readAsArrayBuffer(file);
     });
 
-    // 3. Обработка данных
     function processData(buffer) {
         try {
             var workbook = XLSX.read(buffer, {type: 'array'});
@@ -190,7 +243,6 @@
         } catch (e) { alert("Ошибка: " + e.message); }
     }
 
-    // 4. Отрисовка таблицы
     function renderTable(data) {
         var headers = data[0].map(h => ({ title: h || "Col" }));
         var rows = data.slice(1);
@@ -202,7 +254,7 @@
             });
         });
 
-        $('#priceTable').DataTable({
+        var table = $('#priceTable').DataTable({
             data: rows,
             columns: headers,
             pageLength: 20,
@@ -216,18 +268,41 @@
             }
         });
 
+        // === ФИШКА: КЛИК ПО СТРОКЕ ДЛЯ КОПИРОВАНИЯ ===
+        $('#priceTable tbody').on('click', 'tr', function () {
+            var data = table.row(this).data();
+            if (data) {
+                // Собираем текст строки (Название + Цена)
+                var textToCopy = data.join(' '); 
+                
+                // Копируем в буфер
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    showToast(); // Показываем уведомление
+                }, function(err) {
+                    console.error('Ошибка копирования: ', err);
+                });
+            }
+        });
+
         $('#loading').hide();
         $('#table-wrapper').fadeIn();
     }
 
-    // 5. Функция выбора фразы
     function showRandomSlogan() {
         const text = SLOGANS[Math.floor(Math.random() * SLOGANS.length)];
         document.getElementById('static-slogan').innerText = text;
+    }
+
+    // Показ уведомления "Скопировано"
+    function showToast() {
+        var x = document.getElementById("toast");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
 </script>
 
 </body>
 </html>
+
 
 
