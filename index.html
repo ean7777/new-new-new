@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Прайс: Оригинальная парфюмерия</title>
+    <title>Прайс: Оригинальная парфюмерия Rich Flavour</title>
+    
+    <meta property="og:title" content="Rich Flavour: Актуальный прайс">
+    <meta property="og:description" content="Более 26 000 позиций оригинальной парфюмерии. Удобный поиск и актуальные цены.">
+    <meta property="og:image" content="https://rf29.vercel.app/image.png">
+    <meta property="og:url" content="https://rf29.vercel.app/">
+    <meta property="og:type" content="website">
     
     <link rel="icon" href="image.png" type="image/png">
 
@@ -25,8 +31,15 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Убрал отступы body, чтобы футер был во всю ширину */
             background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex: 1; /* Чтобы футер всегда был прижат к низу */
+            padding: 20px;
         }
         .container {
             max-width: 1200px;
@@ -37,99 +50,36 @@
             border-radius: 10px;
         }
         
-        /* === ШАПКА === */
-        .header-section { 
-            text-align: center; 
-            margin-bottom: 20px; 
-            border-bottom: 2px solid #eee; 
-            padding-bottom: 20px; 
-        }
-        #header-logo {
-            max-width: 300px;
-            height: auto;
-            margin-bottom: 10px; 
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
+        /* ШАПКА */
+        .header-section { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+        #header-logo { max-width: 300px; height: auto; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
         h1 { color: #333; margin: 0 0 5px 0; font-weight: 600; }
-        
-        /* Дата обновления */
-        #update-date {
-            color: #27ae60;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            display: block;
-        }
+        #update-date { color: #27ae60; font-weight: bold; font-size: 0.9em; margin-bottom: 15px; display: block; }
+        #static-slogan { font-style: italic; color: #555; min-height: 24px; font-size: 1.1em; margin-bottom: 25px; padding: 0 10%; }
 
-        /* Слоган */
-        #static-slogan { 
-            font-style: italic; 
-            color: #555; 
-            min-height: 24px; 
-            font-size: 1.1em; 
-            margin-bottom: 25px;
-            padding: 0 10%;
-        }
-
-        /* Кнопки соцсетей */
-        .buttons-wrapper {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .social-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-            padding: 12px 25px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        /* ВК */
+        /* КНОПКИ */
+        .buttons-wrapper { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .social-button { display: inline-flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-weight: bold; font-size: 16px; padding: 12px 25px; border-radius: 50px; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .btn-vk { background-color: #0077FF; }
-        .btn-vk:hover { background-color: #005ecc; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 119, 255, 0.3); }
-        
-        /* Телеграм */
+        .btn-vk:hover { background-color: #005ecc; transform: translateY(-2px); }
         .btn-tg { background-color: #229ED9; }
-        .btn-tg:hover { background-color: #1a7db0; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(34, 158, 217, 0.3); }
+        .btn-tg:hover { background-color: #1a7db0; transform: translateY(-2px); }
 
-
-        /* === ИНТЕРФЕЙС === */
-        #scrollTopBtn {
-            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; 
-            border: none; outline: none; background-color: #333; color: white; 
-            cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.3s; opacity: 0.7;
-        }
+        /* ЭЛЕМЕНТЫ ИНТЕРФЕЙСА */
+        #scrollTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; outline: none; background-color: #333; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.3s; opacity: 0.7; }
         #scrollTopBtn:hover { background-color: #000; transform: scale(1.1); opacity: 1; }
-
-        #toast {
-            visibility: hidden; min-width: 250px; margin-left: -125px; 
-            background-color: #333; color: #fff; text-align: center; border-radius: 50px; 
-            padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; 
-            font-size: 17px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+        
+        #toast { visibility: hidden; min-width: 250px; margin-left: -125px; background-color: #333; color: #fff; text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 80px; font-size: 17px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         #toast.show { visibility: visible; -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        /* Таблица */
+        /* ТАБЛИЦА */
         table.dataTable tbody tr { cursor: pointer; transition: background-color 0.1s; }
-        table.dataTable tbody tr:hover { background-color: #fff3cd !important; } 
-        
-        /* Фикс для заголовка таблицы */
+        table.dataTable tbody tr:hover { background-color: #fff3cd !important; }
         thead { background: white; }
 
-        /* Загрузка */
+        /* ЗАГРУЗКА */
         #manual-upload { display: none; text-align: center; padding: 30px; border: 2px dashed #ff6b6b; background-color: #fff5f5; border-radius: 8px; margin: 20px 0; }
         .btn-upload { display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         input[type="file"] { display: none; }
@@ -137,51 +87,79 @@
         .spinner { border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         #table-wrapper { display: none; }
+
+        /* === ПОДВАЛ (FOOTER) === */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 40px 20px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-logo { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; display: block; color: #fff; text-decoration: none;}
+        .footer-links a { color: #adb5bd; text-decoration: none; margin: 0 10px; font-size: 0.9em; }
+        .footer-links a:hover { color: #fff; }
+        .copyright { margin-top: 20px; color: #6c757d; font-size: 0.8em; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-section">
-        <img src="image.png" alt="Rich Flavour Логотип" id="header-logo">
-        <h1>Прайс-лист</h1>
-        
-        <span id="update-date"></span>
-
-        <p id="static-slogan">Только оригинал.</p>
-        
-        <div class="buttons-wrapper">
-            <a href="http://vk.me/richflavour29" target="_blank" class="social-button btn-vk">
-                ВКонтакте
-            </a>
+<div class="main-content">
+    <div class="container">
+        <div class="header-section">
+            <img src="image.png" alt="Rich Flavour Логотип" id="header-logo">
+            <h1>Прайс-лист</h1>
+            <span id="update-date"></span>
+            <p id="static-slogan">Только оригинал.</p>
             
-            <a href="https://t.me/rich_flavour" target="_blank" class="social-button btn-tg">
-                Telegram
-            </a>
+            <div class="buttons-wrapper">
+                <a href="http://vk.me/richflavour29" target="_blank" class="social-button btn-vk">ВКонтакте</a>
+                <a href="https://t.me/rich_flavour" target="_blank" class="social-button btn-tg">Telegram</a>
+            </div>
+        </div>
+
+        <div id="loading">
+            <div class="spinner"></div>
+            <div>Ищем файл price.xlsx...</div>
+        </div>
+
+        <div id="manual-upload">
+            <h3 style="color:#d63031">Файл не загрузился автоматически</h3>
+            <p>Выберите файл вручную:</p>
+            <label class="btn-upload">📂 Выбрать price.xlsx<input type="file" id="fileInput" accept=".xlsx, .xls"></label>
+        </div>
+
+        <div id="table-wrapper">
+            <p style="text-align:center; color:#888; font-size:0.9em; margin-bottom:10px;">
+                💡 Нажмите на строку, чтобы скопировать.
+            </p>
+            <table id="priceTable" class="display" style="width:100%">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
-
-    <div id="loading">
-        <div class="spinner"></div>
-        <div>Ищем файл price.xlsx...</div>
-    </div>
-
-    <div id="manual-upload">
-        <h3 style="color:#d63031">Файл не загрузился автоматически</h3>
-        <p>Выберите файл вручную:</p>
-        <label class="btn-upload">📂 Выбрать price.xlsx<input type="file" id="fileInput" accept=".xlsx, .xls"></label>
-    </div>
-
-    <div id="table-wrapper">
-        <p style="text-align:center; color:#888; font-size:0.9em; margin-bottom:10px;">
-            💡 Нажмите на строку, чтобы скопировать.
-        </p>
-        <table id="priceTable" class="display" style="width:100%">
-            <thead></thead>
-            <tbody></tbody>
-        </table>
-    </div>
 </div>
+
+<footer>
+    <div class="footer-content">
+        <span class="footer-logo">Rich Flavour</span>
+        <p style="color: #adb5bd; font-size: 0.9em; margin-bottom: 20px;">
+            Оригинальная парфюмерия оптом и в розницу.<br>
+            Архангельск и доставка по всей России.
+        </p>
+        
+        <div class="footer-links">
+            <a href="http://vk.me/richflavour29" target="_blank">Заказать ВКонтакте</a> • 
+            <a href="https://t.me/rich_flavour" target="_blank">Канал Telegram</a>
+        </div>
+
+        <div class="copyright">
+            © 2026 Rich Flavour. Все права защищены.
+        </div>
+    </div>
+</footer>
 
 <button id="scrollTopBtn" title="Наверх">⬆</button>
 <div id="toast">✅ Скопировано!</div>
@@ -221,7 +199,6 @@
             const response = await fetch(FILE_NAME + "?v=" + Math.random());
             if (!response.ok) throw new Error("Файл не найден");
             
-            // Получаем дату обновления файла
             const lastModified = response.headers.get("Last-Modified");
             if (lastModified) {
                 const date = new Date(lastModified);
@@ -311,5 +288,4 @@
 
 </body>
 </html>
-
 
